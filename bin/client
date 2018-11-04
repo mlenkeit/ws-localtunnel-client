@@ -1,0 +1,49 @@
+#!/usr/bin/env node
+const client = require('../client')
+
+const argv = require('yargs')
+  .usage('Usage: $0 --port [num] <options>')
+  .env(true)
+  .option('t', {
+    alias: 'api-token',
+    describe: 'API token of the host',
+    demandOption: true
+  })
+  .option('h', {
+    alias: 'host',
+    describe: 'Upstream server providing forwarding',
+    demandOption: true
+  })
+  .option('r', {
+    alias: 'realm',
+    describe: 'Use this realm',
+    demandOption: true
+  })
+  .option('p', {
+    alias: 'port',
+    describe: 'Internal http server port',
+    demandOption: true,
+    number: true
+  })
+  .help('help', 'Show this help and exit')
+  .version(require('../package').version)
+  .argv
+
+const opts = {
+  api_token: argv['api-token'],
+  host: argv.host,
+  port: argv.port,
+  realm: argv.realm
+}
+
+client(opts)
+  .on('connectFailed', function (/* error */) {
+    process.exit(1)
+  })
+  .on('connect', function (connection) {
+    connection.on('error', function (/* error */) {
+      process.exit(1)
+    })
+  })
+
+// vim: ft=javascript
