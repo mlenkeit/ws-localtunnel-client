@@ -1,4 +1,4 @@
-# ws-localtunnel-client
+# ws-localtunnel-client [![Build Status](https://travis-ci.org/mlenkeit/ws-localtunnel-client.svg?branch=master)](https://travis-ci.org/mlenkeit/ws-localtunnel-client)
 
 [Localtunnel](https://github.com/localtunnel/localtunnel) inspired client based on web sockets
 
