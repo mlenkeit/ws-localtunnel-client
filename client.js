@@ -61,7 +61,7 @@ module.exports = function (opts) {
     ping()
   })
 
-  client.connect(`ws://${opts.host}/receive/${opts.realm}`, 'echo-protocol', null, {
+  client.connect(`wss://${opts.host}/receive/${opts.realm}`, 'echo-protocol', null, {
     'Authorization': `token ${opts.api_token}`
   })
 
