@@ -41,6 +41,12 @@ module.exports = function (opts) {
         headers: reqMetadata.headers
       }, function (err, res, body) {
         if (err) {
+          connection.sendUTF(JSON.stringify({
+            uuid: uuid,
+            statusCode: 504,
+            headers: {},
+            body: err.toString()
+          }))
           return console.error(`Received error ${err.toString()}`)
         }
         connection.sendUTF(JSON.stringify({
