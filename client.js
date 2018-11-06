@@ -37,8 +37,8 @@ module.exports = function (opts) {
       const uuid = reqMetadata.uuid
       request({
         method: reqMetadata.method,
-        uri: `http://localhost:${opts.port}${reqMetadata.url}`,
-        headers: reqMetadata.headers
+        uri: `http://localhost:${opts.port}${reqMetadata.url}`
+        //, headers: reqMetadata.headers
       }, function (err, res, body) {
         if (err) {
           connection.sendUTF(JSON.stringify({
