@@ -6,7 +6,8 @@
   "scripts": {
     "fix": "standard bin/client *.js --fix --verbose | snazzy",
     "lint": "standard bin/client *.js --verbose | snazzy",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "local": "./bin/client -t 123 -u ws://localhost:8080 -r test -d localhost:8080"
   },
   "repository": {
     "type": "git",

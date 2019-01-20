@@ -5,11 +5,11 @@ const request = require('request')
 
 const WebSocketClient = require('websocket').client
 
-module.exports = function (opts) {
-  assert(opts.api_token, 'API token option is required')
-  assert(opts.host, 'host option is required')
-  assert(opts.port, 'port option is required')
-  assert(opts.realm, 'realm option is required')
+module.exports = function ({ apiToken, ltOrigin, destinationOrigin, realm }) {
+  assert(apiToken, 'API token option is required')
+  assert(ltOrigin, 'ltOrigin option is required')
+  assert(destinationOrigin, 'destinationOrigin option is required')
+  assert(realm, 'realm option is required')
 
   const client = new WebSocketClient()
 
@@ -18,7 +18,7 @@ module.exports = function (opts) {
   })
 
   client.on('connect', function (connection) {
-    console.log(`Connected to ${opts.host}, listening to realm ${opts.realm}`)
+    console.log(`Connected to ${ltOrigin}, listening to realm ${realm}`)
 
     connection.on('error', function (error) {
       console.error('Connection error:', error.toString())
@@ -29,15 +29,18 @@ module.exports = function (opts) {
     })
 
     connection.on('message', function (message) {
+      console.log('message', message)
       if (message.type !== 'utf8') {
         console.error(`Ignoring message of type ${message.type}`)
       }
 
       const reqMetadata = JSON.parse(message.utf8Data)
       const uuid = reqMetadata.uuid
+      const uri = `${destinationOrigin}${reqMetadata.url}`
+      console.log(`Forwarding request to ${uri}`)
       request({
         method: reqMetadata.method,
-        uri: `http://localhost:${opts.port}${reqMetadata.url}`,
+        uri: uri,
         json: reqMetadata.body
         //, headers: reqMetadata.headers
       }, function (err, res, body) {
@@ -68,8 +71,8 @@ module.exports = function (opts) {
     ping()
   })
 
-  client.connect(`wss://${opts.host}/receive/${opts.realm}`, 'echo-protocol', null, {
-    'Authorization': `token ${opts.api_token}`
+  client.connect(`${ltOrigin}/receive/${realm}`, 'echo-protocol', null, {
+    'Authorization': `token ${apiToken}`
   })
 
   return client

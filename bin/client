@@ -9,9 +9,9 @@ const argv = require('yargs')
     describe: 'API token of the host',
     demandOption: true
   })
-  .option('h', {
-    alias: 'host',
-    describe: 'Upstream server providing forwarding',
+  .option('u', {
+    alias: 'lt-origin',
+    describe: 'Upstream server providing forwarding (ws/wss)',
     demandOption: true
   })
   .option('r', {
@@ -19,20 +19,19 @@ const argv = require('yargs')
     describe: 'Use this realm',
     demandOption: true
   })
-  .option('p', {
-    alias: 'port',
-    describe: 'Internal http server port',
-    demandOption: true,
-    number: true
+  .option('d', {
+    alias: 'destination-origin',
+    describe: 'Destination origin to forward requests to',
+    demandOption: true
   })
   .help('help', 'Show this help and exit')
   .version(require('../package').version)
   .argv
 
 const opts = {
-  api_token: argv['api-token'],
-  host: argv.host,
-  port: argv.port,
+  apiToken: argv['api-token'],
+  ltOrigin: argv['lt-origin'],
+  destinationOrigin: argv['destination-origin'],
   realm: argv.realm
 }
 
