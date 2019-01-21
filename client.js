@@ -5,7 +5,9 @@ const request = require('request')
 
 const WebSocketClient = require('websocket').client
 
-module.exports = function ({ apiToken, ltOrigin, destinationOrigin, realm }) {
+const noop = () => {}
+
+module.exports = function ({ apiToken, ltOrigin, destinationOrigin, realm, onError = noop }) {
   assert(apiToken, 'API token option is required')
   assert(ltOrigin, 'ltOrigin option is required')
   assert(destinationOrigin, 'destinationOrigin option is required')
@@ -15,6 +17,7 @@ module.exports = function ({ apiToken, ltOrigin, destinationOrigin, realm }) {
 
   client.on('connectFailed', function (error) {
     console.error('Failed to connect:', error.toString())
+    onError()
   })
 
   client.on('connect', function (connection) {
@@ -22,10 +25,12 @@ module.exports = function ({ apiToken, ltOrigin, destinationOrigin, realm }) {
 
     connection.on('error', function (error) {
       console.error('Connection error:', error.toString())
+      onError()
     })
 
     connection.on('close', function () {
       console.log('Connection was closed')
+      onError()
     })
 
     connection.on('message', function (message) {

@@ -32,7 +32,8 @@ const opts = {
   apiToken: argv['api-token'],
   ltOrigin: argv['lt-origin'],
   destinationOrigin: argv['destination-origin'],
-  realm: argv.realm
+  realm: argv.realm,
+  onError: () => process.exit(1)
 }
 
 client(opts)
